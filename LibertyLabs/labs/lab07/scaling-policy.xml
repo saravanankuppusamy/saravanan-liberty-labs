@@ -1,0 +1,15 @@
+  <!-- Lab 7, Part 1 - paste inside <server> in the CONTROLLER's server.xml,
+       replacing the <scalingDefinitions> block that is already there. -->
+  <scalingDefinitions>
+    <!-- The built-in default policy keeps at least 2 servers of every cluster running. Turn it off
+         so only our policy decides. -->
+    <defaultScalingPolicy enabled="false"/>
+
+    <scalingPolicy id="webPolicy" enabled="true" min="1" max="3">
+      <bind clusters="web"/>
+      <!-- Below 10% average CPU the cluster shrinks; above 60% it grows -->
+      <metric name="cpu" min="10" max="60"/>
+      <in  amount="1" units="instance" minInterval="60s"/>
+      <out amount="1" units="instance" minInterval="60s"/>
+    </scalingPolicy>
+  </scalingDefinitions>

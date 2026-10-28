@@ -1,0 +1,16 @@
+<!-- Lab 10, Part 4 - OpenLDAP registry. Replace the <basicRegistry> block in payrollServer's
+     server.xml with this (a server uses one registry unless you add federation), and add
+     <feature>ldapRegistry-3.0</feature> to featureManager.
+     Encode the bind password first with securityUtility encode (aes encoding), see the lab guide. -->
+<ldapRegistry id="ldap" realm="PayrollLDAP"
+              host="localhost" port="389" ldapType="Custom"
+              baseDN="dc=example,dc=com"
+              bindDN="cn=Manager,dc=example,dc=com"
+              bindPassword="{aes}PASTE_ENCODED_PASSWORD_HERE"
+              recursiveSearch="true">
+  <customFilters userFilter="(&amp;(uid=%v)(objectclass=inetOrgPerson))"
+                 groupFilter="(&amp;(cn=%v)(objectclass=groupOfNames))"
+                 userIdMap="*:uid"
+                 groupIdMap="*:cn"
+                 groupMemberIdMap="groupOfNames:member"/>
+</ldapRegistry>

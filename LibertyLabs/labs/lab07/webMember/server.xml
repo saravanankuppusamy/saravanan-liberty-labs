@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Lab 7 server template "webMember".
+  Copy this folder to  C:\IBM\wlp\templates\servers\webMember  and then:
+     server create member3 (template option = webMember)
+  Every server made from it is a clustered, auto-scalable member of cluster "web".
+  Ports differ per server, so they come from variables you set in the new server's
+  bootstrap.properties (member.http.port / member.https.port).
+-->
+<server description="Cluster web member (from template webMember)">
+  <featureManager>
+    <feature>pages-3.1</feature>
+    <feature>monitor-1.0</feature>
+    <feature>collectiveMember-1.0</feature>
+    <feature>clusterMember-1.0</feature>
+    <feature>scalingMember-1.0</feature>
+  </featureManager>
+
+  <variable name="defaultHostName" value="localhost"/>
+  <variable name="member.http.port"  defaultValue="9183"/>
+  <variable name="member.https.port" defaultValue="9546"/>
+  <httpEndpoint id="defaultHttpEndpoint" host="*"
+                httpPort="${member.http.port}" httpsPort="${member.https.port}"/>
+
+  <clusterMember name="web"/>
+
+  <!-- All scaling members on one host must use the same port here -->
+  <hostSingleton name="ScalingMemberSingletonService" port="20020"/>
+
+  <!-- Written by collective join; optional so the server can be created before it joins -->
+  <include optional="true" location="${server.config.dir}/collective-join-include.xml"/>
+</server>

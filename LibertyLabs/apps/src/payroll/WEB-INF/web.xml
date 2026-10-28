@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="https://jakarta.ee/xml/ns/jakartaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-app_6_0.xsd"
+         version="6.0">
+  <display-name>payroll</display-name>
+
+  <!-- Any employee may view the payroll home page -->
+  <security-constraint>
+    <web-resource-collection>
+      <web-resource-name>payroll home</web-resource-name>
+      <url-pattern>/*</url-pattern>
+    </web-resource-collection>
+    <auth-constraint><role-name>employee</role-name><role-name>manager</role-name></auth-constraint>
+    <user-data-constraint><transport-guarantee>CONFIDENTIAL</transport-guarantee></user-data-constraint>
+  </security-constraint>
+
+  <!-- Only managers may approve raises -->
+  <security-constraint>
+    <web-resource-collection>
+      <web-resource-name>manager pages</web-resource-name>
+      <url-pattern>/manage/*</url-pattern>
+    </web-resource-collection>
+    <auth-constraint><role-name>manager</role-name></auth-constraint>
+    <user-data-constraint><transport-guarantee>CONFIDENTIAL</transport-guarantee></user-data-constraint>
+  </security-constraint>
+
+  <login-config>
+    <auth-method>BASIC</auth-method>
+    <realm-name>Payroll</realm-name>
+  </login-config>
+
+  <!-- Roles are names inside the app. server.xml binds them to real users and groups. -->
+  <security-role><role-name>employee</role-name></security-role>
+  <security-role><role-name>manager</role-name></security-role>
+</web-app>

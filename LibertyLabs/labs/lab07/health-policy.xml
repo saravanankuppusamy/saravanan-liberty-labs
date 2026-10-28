@@ -1,0 +1,23 @@
+<!--
+  Lab 7, Part 4 - health policy for cluster "web".  Included from the CONTROLLER's server.xml:
+      <include location="C:/LibertyLabs/labs/lab07/health-policy.xml"/>
+
+  !!  INSTRUCTOR: VERIFY BEFORE CLASS  !!
+  The element and attribute names below follow IBM's Liberty health-management model
+  (condition -> actions, scoped to a cluster, automatic reaction mode) but were NOT checked
+  against your Liberty level. Open IBM Docs > WebSphere Liberty ND > "Configuring health
+  management for Liberty", compare with the excessive-response-time example there, and fix this
+  file once. Students only include it, so the fix is in one place.
+  Test: start the collective, include the file, watch the controller's messages.log for errors
+  (CWWKG0014E = unknown element), then run labs\lab07\slow-requests.ps1.
+-->
+<server>
+  <healthPolicy id="webSlowPolicy" name="webSlowPolicy" enabled="true" reactionMode="AUTOMATIC">
+    <!-- Breached when the average response time on a member stays above 5 seconds -->
+    <excessiveResponseTimeCondition responseTime="5s"/>
+    <!-- Applies to every member of cluster web -->
+    <bind clusters="web"/>
+    <!-- What the controller does about it -->
+    <action action="restartServer"/>
+  </healthPolicy>
+</server>

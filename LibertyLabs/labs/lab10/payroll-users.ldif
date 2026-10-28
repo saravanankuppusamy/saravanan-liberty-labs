@@ -1,0 +1,62 @@
+# Lab 10 - payroll users and groups for OpenLDAP.
+# Assumes the suffix dc=example,dc=com already exists (the default in most OpenLDAP-for-Windows builds).
+# If yours differs, replace dc=example,dc=com everywhere, here and in ldap-registry.xml.
+#   ldapadd -x -D "cn=Manager,dc=example,dc=com" -W -f payroll-users.ldif
+# Every user's password is:  Passw0rd
+
+dn: ou=people,dc=example,dc=com
+objectClass: organizationalUnit
+ou: people
+
+dn: ou=groups,dc=example,dc=com
+objectClass: organizationalUnit
+ou: groups
+
+dn: uid=lucy,ou=people,dc=example,dc=com
+objectClass: inetOrgPerson
+uid: lucy
+cn: Lucy Ward
+sn: Ward
+userPassword: Passw0rd
+
+dn: uid=mark,ou=people,dc=example,dc=com
+objectClass: inetOrgPerson
+uid: mark
+cn: Mark Reyes
+sn: Reyes
+userPassword: Passw0rd
+
+dn: uid=opsadmin,ou=people,dc=example,dc=com
+objectClass: inetOrgPerson
+uid: opsadmin
+cn: Ops Admin
+sn: Admin
+userPassword: Passw0rd
+
+dn: uid=auditor,ou=people,dc=example,dc=com
+objectClass: inetOrgPerson
+uid: auditor
+cn: Audit Reader
+sn: Reader
+userPassword: Passw0rd
+
+dn: cn=staff,ou=groups,dc=example,dc=com
+objectClass: groupOfNames
+cn: staff
+member: uid=lucy,ou=people,dc=example,dc=com
+member: uid=mark,ou=people,dc=example,dc=com
+
+dn: cn=managers,ou=groups,dc=example,dc=com
+objectClass: groupOfNames
+cn: managers
+member: uid=mark,ou=people,dc=example,dc=com
+
+dn: cn=libertyadmins,ou=groups,dc=example,dc=com
+objectClass: groupOfNames
+cn: libertyadmins
+member: uid=opsadmin,ou=people,dc=example,dc=com
+
+dn: cn=auditors,ou=groups,dc=example,dc=com
+objectClass: groupOfNames
+cn: auditors
+member: uid=auditor,ou=people,dc=example,dc=com

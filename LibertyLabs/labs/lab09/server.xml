@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Lab 9 - one server.xml that runs unchanged on a laptop, in a container, or in the cloud.
+     Everything that differs per environment comes from variables, and every variable can be
+     set from an environment variable of the same name in capitals with _ for dots
+     (HTTP_PORT sets http.port). -->
+<server description="Lab 9 - cloud-ready server">
+  <featureManager>
+    <feature>pages-3.1</feature>
+    <feature>mpHealth-4.0</feature>
+    <feature>mpMetrics-5.1</feature>
+  </featureManager>
+
+  <!-- defaultValue is used only when no environment variable (or bootstrap property) sets it -->
+  <variable name="http.port"    defaultValue="9080"/>
+  <variable name="https.port"   defaultValue="9443"/>
+
+  <httpEndpoint id="defaultHttpEndpoint" host="*" httpPort="${http.port}" httpsPort="${https.port}"/>
+
+  <!-- /metrics normally needs an administrator login; for this lab the endpoint is open so a
+       scraper (Prometheus, or your browser) can read it. Do not do this in production. -->
+  <mpMetrics authentication="false"/>
+
+  <!-- Containers expect logs on stdout in JSON -->
+  <logging consoleFormat="json" consoleSource="message,trace,accessLog,ffdc,audit"/>
+</server>
